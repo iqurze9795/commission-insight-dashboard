@@ -39,13 +39,13 @@ const CommissionByDate: React.FC = () => {
     return Array.from(dateMap.entries())
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => {
-        // Sort dates in chronological order (assuming DD/MM/YYYY format)
+        // Sort dates in DESC order (latest date first) - assuming DD/MM/YYYY format
         const [dayA, monthA, yearA] = a.name.split("/").map(Number);
         const [dayB, monthB, yearB] = b.name.split("/").map(Number);
-        
-        if (yearA !== yearB) return yearA - yearB;
-        if (monthA !== monthB) return monthA - monthB;
-        return dayA - dayB;
+
+        if (yearA !== yearB) return yearB - yearA;
+        if (monthA !== monthB) return monthB - monthA;
+        return dayB - dayA;
       });
   }, [commissionData]);
 
@@ -107,3 +107,4 @@ const CommissionByDate: React.FC = () => {
 };
 
 export default CommissionByDate;
+
