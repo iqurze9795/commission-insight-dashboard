@@ -12,9 +12,9 @@ const CommissionExcludingYesterday: React.FC = () => {
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
     
-    const yesterdayFormatted = `${String(yesterday.getDate()).padStart(2, '0')}/${
+    const yesterdayFormatted = `${yesterday.getFullYear()}-${
       String(yesterday.getMonth() + 1).padStart(2, '0')
-    }/${yesterday.getFullYear()}`;
+    }-${String(yesterday.getDate()).padStart(2, '0')}`;
 
     // Calculate total excluding yesterday
     const total = commissionData.reduce((sum, entry) => {
