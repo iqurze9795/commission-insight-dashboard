@@ -50,9 +50,9 @@ const CommissionByDate: React.FC = () => {
   }, [commissionData]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
       <CardHeader>
-        <CardTitle className="text-lg text-gray-600">Commission by Date</CardTitle>
+        <CardTitle className="text-lg text-primary">Commission by Date</CardTitle>
       </CardHeader>
       <CardContent className="h-80">
         {dateData.length > 0 ? (
@@ -65,8 +65,13 @@ const CommissionByDate: React.FC = () => {
                 height={70}
                 interval={0}
                 tick={{ fontSize: 12 }}
+                stroke="currentColor"
+                className="text-muted-foreground"
               />
-              <YAxis />
+              <YAxis 
+                stroke="currentColor"
+                className="text-muted-foreground"
+              />
               <Tooltip 
                 formatter={(value: number) => [
                   `฿${value.toLocaleString("th-TH", {
@@ -75,12 +80,18 @@ const CommissionByDate: React.FC = () => {
                   })}`,
                   "Commission"
                 ]}
+                contentStyle={{ 
+                  backgroundColor: 'var(--card)', 
+                  borderColor: 'var(--border)',
+                  color: 'var(--card-foreground)'
+                }}
+                labelStyle={{ color: 'var(--card-foreground)' }}
               />
-              <Bar dataKey="value" fill="#6366f1" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="var(--dashboard-blue, #6366f1)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="flex h-full items-center justify-center text-gray-500">
+          <div className="flex h-full items-center justify-center text-muted-foreground">
             Upload data to see commission by date
           </div>
         )}

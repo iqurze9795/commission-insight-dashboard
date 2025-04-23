@@ -27,9 +27,9 @@ const CommissionByGG555: React.FC = () => {
   });
 
   return (
-    <Card className="w-full">
+    <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
       <CardHeader>
-        <CardTitle className="text-lg text-gray-600">
+        <CardTitle className="text-lg text-primary">
           Total Commission for Sub_id1 = "{TARGET_SUB_ID}"
         </CardTitle>
       </CardHeader>

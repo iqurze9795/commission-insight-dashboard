@@ -78,25 +78,29 @@ const FileUpload: React.FC = () => {
   }, [handleParseCsv]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
       <CardHeader>
-        <CardTitle>Upload Commission Data</CardTitle>
-        <CardDescription>Upload a CSV file with your commission data to analyze</CardDescription>
+        <CardTitle className="text-xl text-primary">Upload Commission Data</CardTitle>
+        <CardDescription className="text-muted-foreground">
+          Upload a CSV file with your commission data to analyze
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div
-          className={`border-2 border-dashed rounded-lg p-12 text-center ${
-            isDragging ? "border-dashboard-blue bg-blue-50" : "border-gray-300"
+          className={`border-2 border-dashed rounded-lg p-12 text-center transition-all duration-300 ${
+            isDragging 
+              ? "border-primary bg-primary/5" 
+              : "border-border hover:border-primary/50 hover:bg-muted/10"
           }`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <Upload className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-          <h3 className="text-lg font-medium mb-2">
+          <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+          <h3 className="text-lg font-medium mb-2 text-foreground">
             Drag and drop your CSV file here
           </h3>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             or click the button below to browse files
           </p>
           <div className="relative">
@@ -106,7 +110,7 @@ const FileUpload: React.FC = () => {
               onChange={handleFileChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
-            <Button className="bg-dashboard-blue hover:bg-blue-700">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
               Select CSV File
             </Button>
           </div>

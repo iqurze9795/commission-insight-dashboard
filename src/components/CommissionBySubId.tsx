@@ -35,9 +35,9 @@ const CommissionBySubId: React.FC = () => {
   }, [commissionData]);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
       <CardHeader>
-        <CardTitle className="text-lg text-gray-600">Commission by Sub_id1</CardTitle>
+        <CardTitle className="text-lg text-primary">Commission by Sub_id1</CardTitle>
       </CardHeader>
       <CardContent className="h-80">
         {subIdData.length > 0 ? (
@@ -50,8 +50,13 @@ const CommissionBySubId: React.FC = () => {
                 height={70}
                 interval={0}
                 tick={{ fontSize: 12 }}
+                stroke="currentColor"
+                className="text-muted-foreground"
               />
-              <YAxis />
+              <YAxis 
+                stroke="currentColor"
+                className="text-muted-foreground"
+              />
               <Tooltip 
                 formatter={(value: number) => [
                   `฿${value.toLocaleString("th-TH", {
@@ -60,12 +65,18 @@ const CommissionBySubId: React.FC = () => {
                   })}`,
                   "Commission"
                 ]}
+                contentStyle={{ 
+                  backgroundColor: 'var(--card)', 
+                  borderColor: 'var(--border)',
+                  color: 'var(--card-foreground)'
+                }}
+                labelStyle={{ color: 'var(--card-foreground)' }}
               />
-              <Bar dataKey="value" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="var(--dashboard-purple, #8b5cf6)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <div className="flex h-full items-center justify-center text-gray-500">
+          <div className="flex h-full items-center justify-center text-muted-foreground">
             Upload data to see commission by Sub_id1
           </div>
         )}
