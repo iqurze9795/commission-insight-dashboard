@@ -19,7 +19,7 @@ const TotalOrders: React.FC = () => {
   }, [commissionData]);
 
   return (
-    <Card className="shadow-lg border-green-800 bg-[#F2FCE2] transition-all duration-300 hover:shadow-xl w-full">
+    <Card className="shadow-lg border-green-800  transition-all duration-300 hover:shadow-xl w-full">
       <CardHeader className="flex flex-row items-center gap-3 pb-2">
         <div className="bg-[#3F7D58] rounded-full p-2">
           <List className="text-white w-6 h-6" />
@@ -29,7 +29,7 @@ const TotalOrders: React.FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0 flex flex-col items-start">
-        <span className="text-4xl font-bold text-[#3F7D58]">{uniqueOrderIds.size.toLocaleString()}</span>
+        <span className="text-4xl font-bold  text-[#EFEFEF]">{uniqueOrderIds.size.toLocaleString()}</span>
         <span className="text-xs text-muted-foreground mt-1">Total valid orders found</span>
       </CardContent>
     </Card>

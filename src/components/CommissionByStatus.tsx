@@ -4,66 +4,45 @@ import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-const CommissionByDate: React.FC = () => {
+const CommissionByStatus: React.FC = () => {
   const { commissionData } = useCommission();
 
-  const dateData = useMemo(() => {
-    const dateMap = new Map<string, number>();
+  const statusData = useMemo(() => {
+    const statusMap = new Map<string, number>();
 
     commissionData.forEach((entry) => {
       // Check if entry and required fields exist
-      if (!entry || !entry["เวลาคลิก"] || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
+      if (!entry || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
         return;
       }
       
-      try {
-        // Extract date portion only from the Thai date format
-        const fullDate = entry["เวลาคลิก"];
-        // Assuming format like "01/02/2023 13:45:00"
-        const dateOnly = fullDate.split(" ")[0];
-        
-        const commissionValue = parseFloat(
-          entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")
-        ) || 0;
+      const status = entry["สถานะสินค้า Affiliate"] || "Unknown";
+      const commissionValue = parseFloat(
+        entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")
+      ) || 0;
 
-        if (dateMap.has(dateOnly)) {
-          dateMap.set(dateOnly, (dateMap.get(dateOnly) || 0) + commissionValue);
-        } else {
-          dateMap.set(dateOnly, commissionValue);
-        }
-      } catch (error) {
-        console.error("Error processing date:", error);
+      if (statusMap.has(status) && status) {
+        statusMap.set(status, (statusMap.get(status) || 0) + commissionValue);
+      } else {
+        statusMap.set(status, commissionValue);
       }
     });
 
-    // Convert to array and sort in descending date order
-    return Array.from(dateMap.entries())
+    return Array.from(statusMap.entries())
       .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => {
-        // Parse dates properly - assuming DD/MM/YYYY format
-        const [dayA, monthA, yearA] = a.name.split("-").map(Number);
-        const [dayB, monthB, yearB] = b.name.split("-").map(Number);
-        
-        // Create Date objects for proper comparison
-        const dateA = new Date(yearA, monthA - 1, dayA);
-        const dateB = new Date(yearB, monthB - 1, dayB);
-        
-        // Sort in descending order (most recent first)
-        return dateB.getTime() - dateA.getTime();
-      });
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10); // Get top 10 for better visualization
   }, [commissionData]);
-
-  console.log("Sorted date data:", dateData);
 
   return (
     <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
       <CardHeader>
-        <CardTitle className="text-lg text-primary">Commission by Date</CardTitle>
+        <CardTitle className="text-lg text-primary">Commission by status</CardTitle>
       </CardHeader>
       <CardContent className="h-80">
-        {dateData.length > 0 ? (
+        {statusData.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={dateData} margin={{ top: 5, right: 20, left: 20, bottom: 50 }}>
+            <BarChart data={statusData} margin={{ top: 5, right: 20, left: 20, bottom: 50 }}>
               <XAxis 
                 dataKey="name" 
                 angle={-45} 
@@ -99,12 +78,12 @@ const CommissionByDate: React.FC = () => {
                   fontWeight: 600 
                 }}
               />
-              <Bar dataKey="value" fill="var(--dashboard-blue, #6366f1)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="value" fill="var(--dashboard-purple, #8b5cf6)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
           <div className="flex h-full items-center justify-center text-muted-foreground">
-            Upload data to see commission by date clicked
+            Upload data to see commission by status
           </div>
         )}
       </CardContent>
@@ -112,4 +91,4 @@ const CommissionByDate: React.FC = () => {
   );
 };
 
-export default CommissionByDate;
+export default CommissionByStatus;
