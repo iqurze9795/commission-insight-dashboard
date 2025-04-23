@@ -34,7 +34,7 @@ const TotalCommissionExcludingGG555: React.FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-grow flex items-center">
-        <div className="text-4xl font-bold text-dashboard-green">฿{formatted}</div>
+        <div className="text-4xl font-bold text-[#6E59A5]">฿{formatted}</div>
       </CardContent>
     </Card>
   );

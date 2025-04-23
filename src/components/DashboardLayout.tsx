@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useCommission } from "@/context/CommissionContext";
 import FileUpload from "./FileUpload";
@@ -46,8 +45,8 @@ const DashboardLayout: React.FC = () => {
             {/* All summary cards in one row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <TotalCommission />
-              <TotalCommissionExcludingGG555 />
               <CommissionExcludingYesterday />
+              <TotalCommissionExcludingGG555 />
               <CommissionByGG555 />
             </div>
 
