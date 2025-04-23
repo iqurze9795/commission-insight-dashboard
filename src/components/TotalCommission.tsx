@@ -33,7 +33,7 @@ const TotalCommission: React.FC = () => {
         <CardTitle className="text-lg text-primary">Total Commission</CardTitle>
       </CardHeader>
       <CardContent className="flex-grow flex items-center">
-        <div className="text-4xl font-bold text-[#1A1F2C]">฿{formattedTotal}</div>
+        <div className="text-4xl font-bold text-[#3F7D58]">฿{formattedTotal}</div>
       </CardContent>
     </Card>
   );
