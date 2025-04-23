@@ -51,13 +51,13 @@ const CommissionExcludingYesterday: React.FC = () => {
   });
 
   return (
-    <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
+    <Card className="w-full h-full shadow-lg transition-all duration-300 hover:shadow-xl flex flex-col">
       <CardHeader>
         <CardTitle className="text-lg text-primary">
           Commission Excluding Yesterday
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow flex flex-col justify-center">
         <div className="text-4xl font-bold text-dashboard-green">฿{formattedTotal}</div>
         <p className="text-sm text-muted-foreground mt-2">
           Excludes entries from {yesterdayDate}

@@ -28,11 +28,11 @@ const TotalCommission: React.FC = () => {
   });
 
   return (
-    <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
+    <Card className="w-full h-full shadow-lg transition-all duration-300 hover:shadow-xl flex flex-col">
       <CardHeader>
         <CardTitle className="text-lg text-primary">Total Commission</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow flex items-center">
         <div className="text-4xl font-bold text-dashboard-blue">฿{formattedTotal}</div>
       </CardContent>
     </Card>
