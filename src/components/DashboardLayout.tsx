@@ -42,19 +42,15 @@ const DashboardLayout: React.FC = () => {
         {/* Dashboard Cards */}
         {hasData && !isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
-            {/* Total Commission */}
-            <div className="md:col-span-1">
+            {/* Total Commission and Total Commission Excluding GG555 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2">
               <TotalCommission />
+              <TotalCommissionExcludingGG555 />
             </div>
 
             {/* Commission Excluding Yesterday */}
             <div className="md:col-span-1">
               <CommissionExcludingYesterday />
-            </div>
-
-            {/* Total Commission Excluding GG555 */}
-            <div className="md:col-span-2">
-              <TotalCommissionExcludingGG555 />
             </div>
 
             {/* Commission summary for Sub_id1 = "GG555" */}
