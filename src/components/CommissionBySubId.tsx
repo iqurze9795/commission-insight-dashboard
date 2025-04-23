@@ -66,11 +66,17 @@ const CommissionBySubId: React.FC = () => {
                   "Commission"
                 ]}
                 contentStyle={{ 
-                  backgroundColor: 'var(--card)', 
-                  borderColor: 'var(--border)',
-                  color: 'var(--card-foreground)'
+                  backgroundColor: 'hsl(var(--card))', 
+                  borderColor: 'hsl(var(--border))',
+                  color: 'hsl(var(--card-foreground))',
+                  opacity: 1,
+                  borderRadius: '0.5rem',
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
                 }}
-                labelStyle={{ color: 'var(--card-foreground)' }}
+                labelStyle={{ 
+                  color: 'hsl(var(--card-foreground))',
+                  fontWeight: 600 
+                }}
               />
               <Bar dataKey="value" fill="var(--dashboard-purple, #8b5cf6)" radius={[4, 4, 0, 0]} />
             </BarChart>
