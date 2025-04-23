@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useCommission } from "@/context/CommissionContext";
 import FileUpload from "./FileUpload";
@@ -41,30 +42,26 @@ const DashboardLayout: React.FC = () => {
 
         {/* Dashboard Cards */}
         {hasData && !isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
-            {/* Total Commission and Total Commission Excluding GG555 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2">
+          <div className="grid grid-cols-1 gap-6 animate-fade-in">
+            {/* All summary cards in one row */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <TotalCommission />
               <TotalCommissionExcludingGG555 />
-            </div>
-
-            {/* Commission Excluding Yesterday */}
-            <div className="md:col-span-1">
               <CommissionExcludingYesterday />
             </div>
-
+            
             {/* Commission summary for Sub_id1 = "GG555" */}
-            <div className="md:col-span-2">
+            <div>
               <CommissionByGG555 />
             </div>
 
             {/* Commission by Sub_id1 */}
-            <div className="md:col-span-2">
+            <div>
               <CommissionBySubId />
             </div>
 
             {/* Commission by Date */}
-            <div className="md:col-span-2">
+            <div>
               <CommissionByDate />
             </div>
           </div>
@@ -75,3 +72,4 @@ const DashboardLayout: React.FC = () => {
 };
 
 export default DashboardLayout;
+
