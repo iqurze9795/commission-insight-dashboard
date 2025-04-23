@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useCommission } from "@/context/CommissionContext";
 import FileUpload from "./FileUpload";
@@ -6,6 +5,7 @@ import TotalCommission from "./TotalCommission";
 import CommissionBySubId from "./CommissionBySubId";
 import CommissionByDate from "./CommissionByDate";
 import CommissionExcludingYesterday from "./CommissionExcludingYesterday";
+import CommissionByGG555 from "./CommissionByGG555";
 import { Card, CardContent } from "@/components/ui/card";
 
 const DashboardLayout: React.FC = () => {
@@ -44,6 +44,11 @@ const DashboardLayout: React.FC = () => {
           {/* Commission Excluding Yesterday */}
           <div className="md:col-span-1">
             <CommissionExcludingYesterday />
+          </div>
+
+          {/* NEW: Commission summary for Sub_id1 = "GG555" */}
+          <div className="md:col-span-2">
+            <CommissionByGG555 />
           </div>
 
           {/* Commission by Sub_id1 */}
