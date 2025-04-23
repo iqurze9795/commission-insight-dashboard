@@ -8,6 +8,11 @@ const TotalCommission: React.FC = () => {
 
   const totalCommission = useMemo(() => {
     return commissionData.reduce((sum, entry) => {
+      // Check if the entry and the commission field exist
+      if (!entry || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
+        return sum;
+      }
+      
       // Parse the commission value, handling Thai Baht symbol and commas
       const commissionValue = parseFloat(
         entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")

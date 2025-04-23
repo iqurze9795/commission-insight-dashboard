@@ -11,6 +11,11 @@ const CommissionBySubId: React.FC = () => {
     const subIdMap = new Map<string, number>();
 
     commissionData.forEach((entry) => {
+      // Check if entry and required fields exist
+      if (!entry || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
+        return;
+      }
+      
       const subId = entry["Sub_id1"] || "Unknown";
       const commissionValue = parseFloat(
         entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")

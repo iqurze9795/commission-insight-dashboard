@@ -18,6 +18,11 @@ const CommissionExcludingYesterday: React.FC = () => {
 
     // Calculate total excluding yesterday
     const total = commissionData.reduce((sum, entry) => {
+      // Check if entry and required fields exist
+      if (!entry || !entry["เวลาคลิก"] || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
+        return sum;
+      }
+      
       // Extract date only
       const clickDate = entry["เวลาคลิก"].split(" ")[0];
       

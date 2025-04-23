@@ -11,6 +11,11 @@ const CommissionByDate: React.FC = () => {
     const dateMap = new Map<string, number>();
 
     commissionData.forEach((entry) => {
+      // Check if entry and required fields exist
+      if (!entry || !entry["เวลาคลิก"] || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
+        return;
+      }
+      
       try {
         // Extract date portion only from the Thai date format
         const fullDate = entry["เวลาคลิก"];
