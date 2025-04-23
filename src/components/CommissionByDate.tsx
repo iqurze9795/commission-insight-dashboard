@@ -36,18 +36,24 @@ const CommissionByDate: React.FC = () => {
       }
     });
 
+    // Convert to array and sort in descending date order
     return Array.from(dateMap.entries())
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => {
-        // Sort dates in DESC order (latest date first) - assuming DD/MM/YYYY format
+        // Parse dates properly - assuming DD/MM/YYYY format
         const [dayA, monthA, yearA] = a.name.split("/").map(Number);
         const [dayB, monthB, yearB] = b.name.split("/").map(Number);
-
-        if (yearA !== yearB) return yearB - yearA;
-        if (monthA !== monthB) return monthB - monthA;
-        return dayB - dayA;
+        
+        // Create Date objects for proper comparison
+        const dateA = new Date(yearA, monthA - 1, dayA);
+        const dateB = new Date(yearB, monthB - 1, dayB);
+        
+        // Sort in descending order (most recent first)
+        return dateB.getTime() - dateA.getTime();
       });
   }, [commissionData]);
+
+  console.log("Sorted date data:", dateData);
 
   return (
     <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -107,4 +113,3 @@ const CommissionByDate: React.FC = () => {
 };
 
 export default CommissionByDate;
-
