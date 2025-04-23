@@ -11,8 +11,8 @@ const TotalOrders: React.FC = () => {
   const uniqueOrderIds = React.useMemo(() => {
     const orderSet = new Set<string>();
     commissionData.forEach(entry => {
-      if (entry["รหัสคอมมิชชั่น"] && entry["รหัสคอมมิชชั่น"].trim() !== "") {
-        orderSet.add(entry["รหัสคอมมิชชั่น"]);
+      if (entry["เลขที่คำสั่งซื้อ"] && entry["เลขที่คำสั่งซื้อ"].trim() !== "") {
+        orderSet.add(entry["เลขที่คำสั่งซื้อ"]);
       }
     });
     return orderSet;
