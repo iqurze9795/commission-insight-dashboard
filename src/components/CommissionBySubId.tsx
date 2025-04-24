@@ -9,50 +9,39 @@ const CommissionBySubId: React.FC = () => {
 
   const subIdData = useMemo(() => {
     const subIdMap = new Map<string, number>();
-    let hasGG555 = false; // Track if we have GG555 entries
+    const gg555SubIdsMap = new Map<string, number>();
 
-    // First pass: collect all subId1 data except GG555
     commissionData.forEach((entry) => {
       if (!entry || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
         return;
       }
       
       const subId1 = entry["Sub_id1"] || "Unknown";
+      const subId2 = entry["Sub_id2"] || "Unknown";
       const commissionValue = parseFloat(
         entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")
       ) || 0;
 
-      // Mark if we found a GG555 entry
+      // Handle GG555 separately by Sub_id2
       if (subId1 === "GG555") {
-        hasGG555 = true;
-      }
-
-      // For non-GG555 entries, sum them by Sub_id1
-      if (subId1 !== "GG555") {
+        const currentValue = gg555SubIdsMap.get(subId2) || 0;
+        gg555SubIdsMap.set(subId2, currentValue + commissionValue);
+      } else {
         const currentValue = subIdMap.get(subId1) || 0;
         subIdMap.set(subId1, currentValue + commissionValue);
       }
     });
 
-    // If we have GG555 entries, process them separately by Sub_id2
-    if (hasGG555) {
-      // Add a consolidated GG555 entry
-      const gg555Total = commissionData.reduce((sum, entry) => {
-        if (entry && entry["Sub_id1"] === "GG555" && entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
-          return sum + (parseFloat(entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")) || 0);
-        }
-        return sum;
-      }, 0);
-      
-      // Add GG555 to our map
-      subIdMap.set("GG555", gg555Total);
-    }
+    // Convert GG555 Sub_id2 data
+    gg555SubIdsMap.forEach((value, key) => {
+      subIdMap.set(`GG555-${key}`, value);
+    });
 
     return Array.from(subIdMap.entries())
       .map(([name, value]) => ({ 
         name, 
         value,
-        isGG555: name === "GG555" // Flag GG555 entries for special styling
+        isGG555: name.startsWith("GG555-")
       }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 10); // Get top 10 for better visualization
@@ -127,3 +116,4 @@ const CommissionBySubId: React.FC = () => {
 };
 
 export default CommissionBySubId;
+
