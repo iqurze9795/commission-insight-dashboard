@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,15 +11,12 @@ const CommissionByDate: React.FC = () => {
     const dateMap = new Map<string, number>();
 
     commissionData.forEach((entry) => {
-      // Check if entry and required fields exist
       if (!entry || !entry["เวลาคลิก"] || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
         return;
       }
       
       try {
-        // Extract date portion only from the Thai date format
         const fullDate = entry["เวลาคลิก"];
-        // Assuming format like "01/02/2023 13:45:00"
         const dateOnly = fullDate.split(" ")[0];
         
         const commissionValue = parseFloat(
@@ -37,19 +33,15 @@ const CommissionByDate: React.FC = () => {
       }
     });
 
-    // Convert to array and sort in descending date order
     return Array.from(dateMap.entries())
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => {
-        // Parse dates properly - assuming DD/MM/YYYY format
         const [dayA, monthA, yearA] = a.name.split("-").map(Number);
         const [dayB, monthB, yearB] = b.name.split("-").map(Number);
         
-        // Create Date objects for proper comparison
         const dateA = new Date(yearA, monthA - 1, dayA);
         const dateB = new Date(yearB, monthB - 1, dayB);
         
-        // Sort in descending order (most recent first)
         return dateB.getTime() - dateA.getTime();
       });
   }, [commissionData]);
@@ -129,11 +121,10 @@ const CommissionByDate: React.FC = () => {
               />
               <Bar 
                 dataKey="value" 
-                fill="var(--dashboard-blue, #6366f1)" 
                 radius={[4, 4, 0, 0]} 
                 onClick={handleBarClick}
                 style={{ cursor: 'pointer' }}
-                fill={(data) => selectedBars.includes(data.name) ? "#1EAEDB" : "var(--dashboard-blue, #6366f1)"}
+                fill={selectedBars.includes(data?.name) ? "hsl(var(--primary))" : "hsl(var(--muted))"}
               />
             </BarChart>
           </ResponsiveContainer>
