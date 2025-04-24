@@ -9,10 +9,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const DateRangeCommission: React.FC = () => {
   const { commissionData } = useCommission();
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [filterGG555, setFilterGG555] = React.useState(false);
 
   const totalCommissionInRange = React.useMemo(() => {
     if (!dateRange?.from || !dateRange?.to) return 0;
@@ -23,14 +27,23 @@ const DateRangeCommission: React.FC = () => {
       const orderDate = new Date(entry["เวลาที่สั่งซื้อสำเร็จ"]);
       if (
         orderDate >= dateRange.from &&
-        orderDate <= dateRange.to
+        orderDate <= dateRange.to &&
+        (!filterGG555 || entry["Sub_id1"] === "GG555")
       ) {
         const commission = parseFloat(entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")) || 0;
         return sum + commission;
       }
       return sum;
     }, 0);
-  }, [commissionData, dateRange]);
+  }, [commissionData, dateRange, filterGG555]);
+
+  const handleSelect = (range: DateRange | undefined) => {
+    setDateRange(range);
+    // Close the popover when both dates are selected
+    if (range?.from && range?.to) {
+      setIsOpen(false);
+    }
+  };
 
   return (
     <Card className="shadow-lg border-[#1EAEDB] transition-all duration-300 hover:shadow-xl w-full">
@@ -44,7 +57,7 @@ const DateRangeCommission: React.FC = () => {
       </CardHeader>
       <CardContent className="pt-0">
         <div className="grid gap-4">
-          <Popover>
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -73,19 +86,28 @@ const DateRangeCommission: React.FC = () => {
                 mode="range"
                 defaultMonth={dateRange?.from}
                 selected={dateRange}
-                onSelect={setDateRange}
+                onSelect={handleSelect}
                 numberOfMonths={2}
                 className="p-3"
               />
             </PopoverContent>
           </Popover>
+
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="gg555-filter"
+              checked={filterGG555}
+              onCheckedChange={setFilterGG555}
+            />
+            <Label htmlFor="gg555-filter">Filter GG555 Only</Label>
+          </div>
           
           <div>
             <div className="text-4xl font-bold text-[#1EAEDB]">
               ฿{totalCommissionInRange.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </div>
             <span className="text-xs text-muted-foreground mt-1">
-              Total commission within selected date range
+              {filterGG555 ? "GG555 commission" : "Total commission"} within selected date range
             </span>
           </div>
         </div>
