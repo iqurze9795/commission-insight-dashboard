@@ -1,3 +1,4 @@
+
 import React, { useMemo } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,39 +9,50 @@ const CommissionBySubId: React.FC = () => {
 
   const subIdData = useMemo(() => {
     const subIdMap = new Map<string, number>();
-    const gg555SubIdsMap = new Map<string, number>();
+    let hasGG555 = false; // Track if we have GG555 entries
 
+    // First pass: collect all subId1 data except GG555
     commissionData.forEach((entry) => {
       if (!entry || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
         return;
       }
       
       const subId1 = entry["Sub_id1"] || "Unknown";
-      const subId2 = entry["Sub_id2"] || "Unknown";
       const commissionValue = parseFloat(
         entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")
       ) || 0;
 
-      // Handle GG555 separately by Sub_id2
+      // Mark if we found a GG555 entry
       if (subId1 === "GG555") {
-        const currentValue = gg555SubIdsMap.get(subId2) || 0;
-        gg555SubIdsMap.set(subId2, currentValue + commissionValue);
-      } else {
+        hasGG555 = true;
+      }
+
+      // For non-GG555 entries, sum them by Sub_id1
+      if (subId1 !== "GG555") {
         const currentValue = subIdMap.get(subId1) || 0;
         subIdMap.set(subId1, currentValue + commissionValue);
       }
     });
 
-    // Convert GG555 Sub_id2 data
-    gg555SubIdsMap.forEach((value, key) => {
-      subIdMap.set(`GG555-${key}`, value);
-    });
+    // If we have GG555 entries, process them separately by Sub_id2
+    if (hasGG555) {
+      // Add a consolidated GG555 entry
+      const gg555Total = commissionData.reduce((sum, entry) => {
+        if (entry && entry["Sub_id1"] === "GG555" && entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
+          return sum + (parseFloat(entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")) || 0);
+        }
+        return sum;
+      }, 0);
+      
+      // Add GG555 to our map
+      subIdMap.set("GG555", gg555Total);
+    }
 
     return Array.from(subIdMap.entries())
       .map(([name, value]) => ({ 
         name, 
         value,
-        isGG555: name.startsWith("GG555-")
+        isGG555: name === "GG555" // Flag GG555 entries for special styling
       }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 10); // Get top 10 for better visualization
@@ -93,21 +105,12 @@ const CommissionBySubId: React.FC = () => {
               <Bar 
                 dataKey="value" 
                 radius={[4, 4, 0, 0]}
+                fill="hsl(var(--muted))"
               >
                 {subIdData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`}
-                    fill={
-                      entry.isGG555 
-                        ? "#F2FCE2" // Light green color for GG555 bars
-                        : "hsl(var(--muted))"
-                    }
-                    stroke={
-                      entry.isGG555 
-                        ? "#10B981" // A slightly darker green for border
-                        : "transparent"
-                    }
-                    strokeWidth={entry.isGG555 ? 2 : 0}
+                    fill={entry.isGG555 ? "hsl(var(--primary))" : "hsl(var(--muted))"}
                   />
                 ))}
               </Bar>
