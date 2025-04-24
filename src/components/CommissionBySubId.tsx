@@ -1,7 +1,8 @@
+
 import React, { useMemo } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 const CommissionBySubId: React.FC = () => {
   const { commissionData } = useCommission();
@@ -52,24 +53,21 @@ const CommissionBySubId: React.FC = () => {
       <CardContent className="h-80">
         {subIdData.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
-              <Pie
-                data={subIdData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={120}
-                label={(entry) => entry.name}
-                labelLine={true}
-              >
-                {subIdData.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`}
-                    fill={entry.isGG555 ? "#8B5CF6" : "#CBD5E1"} 
-                  />
-                ))}
-              </Pie>
+            <BarChart data={subIdData} margin={{ top: 5, right: 20, left: 20, bottom: 50 }}>
+              <XAxis 
+                dataKey="name" 
+                angle={-45} 
+                textAnchor="end" 
+                height={70}
+                interval={0}
+                tick={{ fontSize: 12 }}
+                stroke="currentColor"
+                className="text-muted-foreground"
+              />
+              <YAxis 
+                stroke="currentColor"
+                className="text-muted-foreground"
+              />
               <Tooltip 
                 formatter={(value: number) => [
                   `฿${value.toLocaleString("th-TH", {
@@ -91,7 +89,18 @@ const CommissionBySubId: React.FC = () => {
                   fontWeight: 600 
                 }}
               />
-            </PieChart>
+              <Bar 
+                dataKey="value" 
+                radius={[4, 4, 0, 0]}
+              >
+                {subIdData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`}
+                    fill={entry.isGG555 ? "#8B5CF6" : "#CBD5E1"} 
+                  />
+                ))}
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         ) : (
           <div className="flex h-full items-center justify-center text-muted-foreground">
