@@ -30,7 +30,7 @@ const CommissionByGG555: React.FC = () => {
     <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
       <CardHeader>
         <CardTitle className="text-lg text-primary">
-          Total Commission for Sub_id1 = "{TARGET_SUB_ID}"
+          GG555
         </CardTitle>
       </CardHeader>
       <CardContent>

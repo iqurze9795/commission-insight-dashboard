@@ -66,7 +66,7 @@ const DateRangeCommission: React.FC = () => {
                     format(dateRange.from, "LLL dd, y")
                   )
                 ) : (
-                  <span>Select your date range to display success commission</span>
+                  <span>Choose date</span>
                 )}
               </Button>
             </PopoverTrigger>

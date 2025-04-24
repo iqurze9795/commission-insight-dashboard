@@ -28,7 +28,7 @@ const TotalCommissionExcludingGG555: React.FC = () => {
     <Card className="w-full h-full shadow-lg transition-all duration-300 hover:shadow-xl flex flex-col">
       <CardHeader>
         <CardTitle className="text-lg text-primary">
-          Total Commission (excluding Sub_id1 = "GG555")
+          Without GG555
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-grow flex items-center">
