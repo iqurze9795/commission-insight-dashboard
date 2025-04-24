@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 const CommissionBySubId: React.FC = () => {
   const { commissionData } = useCommission();
@@ -22,7 +22,6 @@ const CommissionBySubId: React.FC = () => {
         entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")
       ) || 0;
 
-      // Handle GG555 separately by Sub_id2
       if (subId1 === "GG555") {
         const currentValue = gg555SubIdsMap.get(subId2) || 0;
         gg555SubIdsMap.set(subId2, currentValue + commissionValue);
@@ -32,19 +31,14 @@ const CommissionBySubId: React.FC = () => {
       }
     });
 
-    // Convert GG555 Sub_id2 data
     gg555SubIdsMap.forEach((value, key) => {
       subIdMap.set(`GG555-${key}`, value);
     });
 
     return Array.from(subIdMap.entries())
-      .map(([name, value]) => ({ 
-        name, 
-        value,
-        isGG555: name.startsWith("GG555-")
-      }))
+      .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value)
-      .slice(0, 10); // Get top 10 for better visualization
+      .slice(0, 10);
   }, [commissionData]);
 
   return (
@@ -93,16 +87,9 @@ const CommissionBySubId: React.FC = () => {
               />
               <Bar 
                 dataKey="value" 
+                fill="#8B5CF6"  // Vivid Purple from color palette
                 radius={[4, 4, 0, 0]}
-                fill="hsl(var(--muted))"
-              >
-                {subIdData.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`}
-                    fill={entry.isGG555 ? "hsl(var(--primary))" : "hsl(var(--muted))"}
-                  />
-                ))}
-              </Bar>
+              />
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -116,4 +103,3 @@ const CommissionBySubId: React.FC = () => {
 };
 
 export default CommissionBySubId;
-
