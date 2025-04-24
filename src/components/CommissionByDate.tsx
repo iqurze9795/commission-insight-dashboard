@@ -119,6 +119,9 @@ const CommissionByDate: React.FC = () => {
                   color: 'hsl(var(--card-foreground))',
                   fontWeight: 600 
                 }}
+                itemStyle={{
+                  color: 'hsl(var(--card-foreground))'
+                }}
               />
               <Bar 
                 dataKey="value" 
