@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 const CommissionByDate: React.FC = () => {
   const { commissionData } = useCommission();
@@ -125,8 +125,15 @@ const CommissionByDate: React.FC = () => {
                 radius={[4, 4, 0, 0]} 
                 onClick={handleBarClick}
                 style={{ cursor: 'pointer' }}
-                fill={(entry) => selectedBars.includes(entry.name) ? "hsl(var(--primary))" : "hsl(var(--muted))"}
-              />
+                fill="hsl(var(--muted))"
+              >
+                {dateData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={selectedBars.includes(entry.name) ? "hsl(var(--primary))" : "hsl(var(--muted))"}
+                  />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         ) : (
