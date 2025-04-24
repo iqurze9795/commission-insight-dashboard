@@ -1,11 +1,12 @@
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 const CommissionByDate: React.FC = () => {
   const { commissionData } = useCommission();
+  const [selectedBars, setSelectedBars] = useState<string[]>([]);
 
   const dateData = useMemo(() => {
     const dateMap = new Map<string, number>();
@@ -53,12 +54,39 @@ const CommissionByDate: React.FC = () => {
       });
   }, [commissionData]);
 
-  console.log("Sorted date data:", dateData);
+  const totalSelectedCommission = useMemo(() => {
+    return dateData
+      .filter(item => selectedBars.includes(item.name))
+      .reduce((sum, item) => sum + item.value, 0);
+  }, [dateData, selectedBars]);
+
+  const handleBarClick = (data: any) => {
+    if (!data) return;
+    
+    const clickedDate = data.name;
+    setSelectedBars(prev => {
+      if (prev.includes(clickedDate)) {
+        return prev.filter(date => date !== clickedDate);
+      }
+      return [...prev, clickedDate];
+    });
+  };
 
   return (
     <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg text-primary">Commission by Date</CardTitle>
+        {selectedBars.length > 0 && (
+          <div className="text-sm">
+            <span className="font-medium">Selected Total: </span>
+            <span className="text-[#1EAEDB]">
+              ฿{totalSelectedCommission.toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
+          </div>
+        )}
       </CardHeader>
       <CardContent className="h-80">
         {dateData.length > 0 ? (
@@ -99,7 +127,14 @@ const CommissionByDate: React.FC = () => {
                   fontWeight: 600 
                 }}
               />
-              <Bar dataKey="value" fill="var(--dashboard-blue, #6366f1)" radius={[4, 4, 0, 0]} />
+              <Bar 
+                dataKey="value" 
+                fill="var(--dashboard-blue, #6366f1)" 
+                radius={[4, 4, 0, 0]} 
+                onClick={handleBarClick}
+                style={{ cursor: 'pointer' }}
+                fill={(data) => selectedBars.includes(data.name) ? "#1EAEDB" : "var(--dashboard-blue, #6366f1)"}
+              />
             </BarChart>
           </ResponsiveContainer>
         ) : (
