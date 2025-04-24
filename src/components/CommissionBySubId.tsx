@@ -99,7 +99,17 @@ const CommissionBySubId: React.FC = () => {
                 {subIdData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`}
-                    fill={entry.isGG555 ? "hsl(var(--primary))" : "hsl(var(--muted))"}
+                    fill={
+                      entry.isGG555 
+                        ? "hsl(var(--primary)) opacity-80" 
+                        : "hsl(var(--muted))"
+                    }
+                    stroke={
+                      entry.isGG555 
+                        ? "hsl(var(--primary))" 
+                        : "transparent"
+                    }
+                    strokeWidth={entry.isGG555 ? 2 : 0}
                   />
                 ))}
               </Bar>
