@@ -1,4 +1,3 @@
-
 import React, { useMemo } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -94,19 +93,18 @@ const CommissionBySubId: React.FC = () => {
               <Bar 
                 dataKey="value" 
                 radius={[4, 4, 0, 0]}
-                fill="hsl(var(--muted))"
               >
                 {subIdData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`}
                     fill={
                       entry.isGG555 
-                        ? "hsl(var(--primary)) opacity-80" 
+                        ? "#F2FCE2" // Light green color for GG555 bars
                         : "hsl(var(--muted))"
                     }
                     stroke={
                       entry.isGG555 
-                        ? "hsl(var(--primary))" 
+                        ? "#10B981" // A slightly darker green for border
                         : "transparent"
                     }
                     strokeWidth={entry.isGG555 ? 2 : 0}
@@ -126,4 +124,3 @@ const CommissionBySubId: React.FC = () => {
 };
 
 export default CommissionBySubId;
-
