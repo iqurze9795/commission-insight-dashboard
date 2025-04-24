@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { formatInTimeZone, toDate } from "date-fns-tz";
+import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 
 const DateRangeCommission: React.FC = () => {
   const { commissionData } = useCommission();
@@ -23,18 +23,23 @@ const DateRangeCommission: React.FC = () => {
     if (!dateRange?.from || !dateRange?.to) return 0;
 
     // Set time to start of day for from date and end of day for to date in Bangkok timezone
-    const fromDate = toDate(dateRange.from.setHours(0, 0, 0, 0), { timeZone: 'Asia/Bangkok' });
-    const toDate = new Date(dateRange.to.setHours(23, 59, 59, 999));
+    const fromDateObj = new Date(dateRange.from);
+    fromDateObj.setHours(0, 0, 0, 0);
+    const fromDateInBangkok = toZonedTime(fromDateObj, 'Asia/Bangkok');
+    
+    const toDateObj = new Date(dateRange.to);
+    toDateObj.setHours(23, 59, 59, 999);
+    const toDateInBangkok = toZonedTime(toDateObj, 'Asia/Bangkok');
 
     return commissionData.reduce((sum, entry) => {
       if (!entry["เวลาที่สั่งซื้อสำเร็จ"]) return sum;
       
       // Convert the order date to Bangkok timezone
-      const orderDate = toDate(new Date(entry["เวลาที่สั่งซื้อสำเร็จ"]), { timeZone: 'Asia/Bangkok' });
+      const orderDate = toZonedTime(new Date(entry["เวลาที่สั่งซื้อสำเร็จ"]), 'Asia/Bangkok');
       
       if (
-        orderDate >= fromDate &&
-        orderDate <= toDate &&
+        orderDate >= fromDateInBangkok &&
+        orderDate <= toDateInBangkok &&
         (!filterGG555 || entry["Sub_id1"] === "GG555")
       ) {
         const commission = parseFloat(entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")) || 0;
@@ -124,4 +129,3 @@ const DateRangeCommission: React.FC = () => {
 };
 
 export default DateRangeCommission;
-
