@@ -2,34 +2,47 @@
 import React, { useMemo } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 const CommissionBySubId: React.FC = () => {
   const { commissionData } = useCommission();
 
   const subIdData = useMemo(() => {
     const subIdMap = new Map<string, number>();
+    const gg555SubIdsMap = new Map<string, number>();
 
     commissionData.forEach((entry) => {
-      // Check if entry and required fields exist
       if (!entry || !entry["ค่าคอมมิชชั่นสุทธิ(฿)"]) {
         return;
       }
       
-      const subId = entry["Sub_id1"] || "Unknown";
+      const subId1 = entry["Sub_id1"] || "Unknown";
+      const subId2 = entry["Sub_id2"] || "Unknown";
       const commissionValue = parseFloat(
         entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")
       ) || 0;
 
-      if (subIdMap.has(subId)) {
-        subIdMap.set(subId, (subIdMap.get(subId) || 0) + commissionValue);
+      // Handle GG555 separately by Sub_id2
+      if (subId1 === "GG555") {
+        const currentValue = gg555SubIdsMap.get(subId2) || 0;
+        gg555SubIdsMap.set(subId2, currentValue + commissionValue);
       } else {
-        subIdMap.set(subId, commissionValue);
+        const currentValue = subIdMap.get(subId1) || 0;
+        subIdMap.set(subId1, currentValue + commissionValue);
       }
     });
 
+    // Convert GG555 Sub_id2 data
+    gg555SubIdsMap.forEach((value, key) => {
+      subIdMap.set(`GG555-${key}`, value);
+    });
+
     return Array.from(subIdMap.entries())
-      .map(([name, value]) => ({ name, value }))
+      .map(([name, value]) => ({ 
+        name, 
+        value,
+        isGG555: name.startsWith("GG555-")
+      }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 10); // Get top 10 for better visualization
   }, [commissionData]);
@@ -78,7 +91,18 @@ const CommissionBySubId: React.FC = () => {
                   fontWeight: 600 
                 }}
               />
-              <Bar dataKey="value" fill="var(--dashboard-purple, #8b5cf6)" radius={[4, 4, 0, 0]} />
+              <Bar 
+                dataKey="value" 
+                radius={[4, 4, 0, 0]}
+                fill="hsl(var(--muted))"
+              >
+                {subIdData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`}
+                    fill={entry.isGG555 ? "hsl(var(--primary))" : "hsl(var(--muted))"}
+                  />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         ) : (
@@ -92,3 +116,4 @@ const CommissionBySubId: React.FC = () => {
 };
 
 export default CommissionBySubId;
+
