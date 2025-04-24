@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 const CommissionBySubId: React.FC = () => {
   const { commissionData } = useCommission();
@@ -36,7 +36,11 @@ const CommissionBySubId: React.FC = () => {
     });
 
     return Array.from(subIdMap.entries())
-      .map(([name, value]) => ({ name, value }))
+      .map(([name, value]) => ({ 
+        name, 
+        value,
+        isGG555: name.startsWith("GG555-")
+      }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 10);
   }, [commissionData]);
@@ -87,9 +91,15 @@ const CommissionBySubId: React.FC = () => {
               />
               <Bar 
                 dataKey="value" 
-                fill="#8B5CF6"  // Vivid Purple from color palette
                 radius={[4, 4, 0, 0]}
-              />
+              >
+                {subIdData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`}
+                    fill={entry.isGG555 ? "#8B5CF6" : "#CBD5E1"} 
+                  />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         ) : (
