@@ -79,7 +79,7 @@ const CommissionBySubId: React.FC = () => {
                 contentStyle={{ 
                   backgroundColor: 'hsl(var(--card))', 
                   borderColor: 'hsl(var(--border))',
-                  color: '#F5C45E',
+                  color: 'hsl(var(--card-foreground))',
                   opacity: 1,
                   borderRadius: '0.5rem',
                   boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
@@ -87,6 +87,9 @@ const CommissionBySubId: React.FC = () => {
                 labelStyle={{ 
                   color: 'hsl(var(--card-foreground))',
                   fontWeight: 600 
+                }}
+                itemStyle={{
+                  color: 'hsl(var(--card-foreground))'
                 }}
               />
               <Bar 

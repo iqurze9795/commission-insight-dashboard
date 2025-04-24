@@ -77,6 +77,9 @@ const CommissionByStatus: React.FC = () => {
                   color: 'hsl(var(--card-foreground))',
                   fontWeight: 600 
                 }}
+                itemStyle={{
+                  color: 'hsl(var(--card-foreground))'
+                }}
               />
               <Bar dataKey="value" fill="var(--dashboard-purple, #8b5cf6)" radius={[4, 4, 0, 0]} />
             </BarChart>
