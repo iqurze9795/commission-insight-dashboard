@@ -79,7 +79,7 @@ const CommissionBySubId: React.FC = () => {
                 contentStyle={{ 
                   backgroundColor: 'hsl(var(--card))', 
                   borderColor: 'hsl(var(--border))',
-                  color: 'hsl(var(--card-foreground))',
+                  color: '#F5C45E',
                   opacity: 1,
                   borderRadius: '0.5rem',
                   boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
@@ -96,7 +96,7 @@ const CommissionBySubId: React.FC = () => {
                 {subIdData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`}
-                    fill={entry.isGG555 ? "#8B5CF6" : "#CBD5E1"} 
+                    fill={entry.isGG555 ? "#102E50" : "#F5C45E"} 
                   />
                 ))}
               </Bar>

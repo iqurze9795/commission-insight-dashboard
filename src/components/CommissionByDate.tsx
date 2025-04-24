@@ -71,7 +71,7 @@ const CommissionByDate: React.FC = () => {
         <CardTitle className="text-lg text-primary">Commission by Date</CardTitle>
         {selectedBars.length > 0 && (
           <div className="text-sm">
-            <span className="font-medium">Selected Total: </span>
+            <span className="font-medium">Total commission: </span>
             <span className="text-[#1EAEDB]">
               ฿{totalSelectedCommission.toLocaleString("th-TH", {
                 minimumFractionDigits: 2,
@@ -130,7 +130,7 @@ const CommissionByDate: React.FC = () => {
                 {dateData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
-                    fill={selectedBars.includes(entry.name) ? "hsl(var(--primary))" : "hsl(var(--muted))"}
+                    fill={selectedBars.includes(entry.name) ? "#E78B48" : "#BE3D2A"}
                   />
                 ))}
               </Bar>
