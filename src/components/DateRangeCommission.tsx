@@ -8,25 +8,22 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { DateRange } from "react-day-picker";
 
 const DateRangeCommission: React.FC = () => {
   const { commissionData } = useCommission();
-  const [dateRange, setDateRange] = React.useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
-    from: undefined,
-    to: undefined,
-  });
+  const [dateRange, setDateRange] = React.useState<DateRange | undefined>();
 
   const totalCommissionInRange = React.useMemo(() => {
-    if (!dateRange.from || !dateRange.to) return 0;
+    if (!dateRange?.from || !dateRange?.to) return 0;
 
     return commissionData.reduce((sum, entry) => {
+      if (!entry["เวลาที่สั่งซื้อสำเร็จ"]) return sum;
+      
       const orderDate = new Date(entry["เวลาที่สั่งซื้อสำเร็จ"]);
       if (
-        orderDate >= dateRange.from! &&
-        orderDate <= dateRange.to!
+        orderDate >= dateRange.from &&
+        orderDate <= dateRange.to
       ) {
         const commission = parseFloat(entry["ค่าคอมมิชชั่นสุทธิ(฿)"].replace(/[฿,]/g, "")) || 0;
         return sum + commission;
@@ -36,7 +33,7 @@ const DateRangeCommission: React.FC = () => {
   }, [commissionData, dateRange]);
 
   return (
-    <Card className="shadow-lg transition-all duration-300 hover:shadow-xl w-full">
+    <Card className="shadow-lg border-[#1EAEDB] transition-all duration-300 hover:shadow-xl w-full">
       <CardHeader className="flex flex-row items-center gap-3 pb-2">
         <div className="bg-[#1EAEDB] rounded-full p-2">
           <CalendarRange className="text-white w-6 h-6" />
@@ -56,7 +53,7 @@ const DateRangeCommission: React.FC = () => {
                   !dateRange && "text-muted-foreground"
                 )}
               >
-                {dateRange.from ? (
+                {dateRange?.from ? (
                   dateRange.to ? (
                     <>
                       {format(dateRange.from, "LLL dd, y")} -{" "}
@@ -66,7 +63,7 @@ const DateRangeCommission: React.FC = () => {
                     format(dateRange.from, "LLL dd, y")
                   )
                 ) : (
-                  <span>Choose date</span>
+                  <span>Choose date range</span>
                 )}
               </Button>
             </PopoverTrigger>
@@ -74,22 +71,19 @@ const DateRangeCommission: React.FC = () => {
               <Calendar
                 initialFocus
                 mode="range"
-                defaultMonth={dateRange.from}
-                selected={{ 
-                  from: dateRange.from,
-                  to: dateRange.to
-                }}
+                defaultMonth={dateRange?.from}
+                selected={dateRange}
                 onSelect={setDateRange}
                 numberOfMonths={2}
-                className={cn("p-3 pointer-events-auto")}
+                className="p-3"
               />
             </PopoverContent>
           </Popover>
           
-          <div className="flex flex-col">
-            <span className="text-4xl font-bold text-[#1EAEDB]">
+          <div>
+            <div className="text-4xl font-bold text-[#1EAEDB]">
               ฿{totalCommissionInRange.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
+            </div>
             <span className="text-xs text-muted-foreground mt-1">
               Total commission within selected date range
             </span>

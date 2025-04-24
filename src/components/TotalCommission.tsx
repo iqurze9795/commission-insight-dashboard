@@ -2,6 +2,7 @@
 import React, { useMemo } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CircleDollarSign } from "lucide-react";
 
 const TotalCommission: React.FC = () => {
   const { commissionData } = useCommission();
@@ -28,12 +29,18 @@ const TotalCommission: React.FC = () => {
   });
 
   return (
-    <Card className="w-full h-full shadow-lg transition-all duration-300 hover:shadow-xl flex flex-col">
-      <CardHeader>
-        <CardTitle className="text-lg text-primary">Total Commission</CardTitle>
+    <Card className="shadow-lg border-[#3F7D58] transition-all duration-300 hover:shadow-xl w-full">
+      <CardHeader className="flex flex-row items-center gap-3 pb-2">
+        <div className="bg-[#3F7D58] rounded-full p-2">
+          <CircleDollarSign className="text-white w-6 h-6" />
+        </div>
+        <CardTitle className="text-[18px] font-semibold text-[#3F7D58]">
+          Total Commission
+        </CardTitle>
       </CardHeader>
-      <CardContent className="flex-grow flex items-center">
+      <CardContent className="pt-0">
         <div className="text-4xl font-bold text-[#3F7D58]">฿{formattedTotal}</div>
+        <span className="text-xs text-muted-foreground mt-1">Total commission earned</span>
       </CardContent>
     </Card>
   );
