@@ -11,6 +11,7 @@ import TotalOrders from "./TotalOrders";
 import ThemeToggle from "./ThemeToggle";
 import { Card, CardContent } from "@/components/ui/card";
 import CommissionByStatus from "./CommissionByStatus";
+import DateRangeCommission from "./DateRangeCommission";
 
 const DashboardLayout: React.FC = () => {
   const { commissionData, isLoading } = useCommission();
@@ -46,12 +47,10 @@ const DashboardLayout: React.FC = () => {
           <div className="grid grid-cols-1 gap-6 animate-fade-in">
             {/* All summary cards in one row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* NEW: Total Orders */}
               <TotalOrders />
-              {/* Existing summary cards */}
               <TotalCommission />
-              <TotalCommissionExcludingGG555 />
               <CommissionByGG555 />
+              <DateRangeCommission />
             </div>
 
             {/* Commission by status */}
