@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -124,7 +125,7 @@ const CommissionByDate: React.FC = () => {
                 radius={[4, 4, 0, 0]} 
                 onClick={handleBarClick}
                 style={{ cursor: 'pointer' }}
-                fill={selectedBars.includes(data?.name) ? "hsl(var(--primary))" : "hsl(var(--muted))"}
+                fill={(entry) => selectedBars.includes(entry.name) ? "hsl(var(--primary))" : "hsl(var(--muted))"}
               />
             </BarChart>
           </ResponsiveContainer>
