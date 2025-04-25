@@ -2,8 +2,9 @@
 import React, { useMemo } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Package } from "lucide-react";
+import { Tooltip as UITooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const TopProductsCommission: React.FC = () => {
   const { commissionData } = useCommission();
@@ -28,6 +29,27 @@ const TopProductsCommission: React.FC = () => {
       .slice(0, 5);
   }, [commissionData]);
 
+  const CustomYAxisTick = (props: any) => {
+    const { x, y, payload } = props;
+    const text = payload.value;
+    const shortenedText = text.length > 20 ? `${text.substring(0, 20)}...` : text;
+
+    return (
+      <UITooltip>
+        <TooltipTrigger asChild>
+          <text x={x} y={y} dy={3} fill="currentColor" textAnchor="end" fontSize={12}>
+            {shortenedText}
+          </text>
+        </TooltipTrigger>
+        {text.length > 20 && (
+          <TooltipContent side="left">
+            <p>{text}</p>
+          </TooltipContent>
+        )}
+      </UITooltip>
+    );
+  };
+
   return (
     <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -49,7 +71,7 @@ const TopProductsCommission: React.FC = () => {
                 dataKey="name" 
                 type="category" 
                 width={150}
-                tick={{ fontSize: 12 }}
+                tick={<CustomYAxisTick />}
                 stroke="currentColor"
               />
               <Tooltip 
@@ -82,3 +104,4 @@ const TopProductsCommission: React.FC = () => {
 };
 
 export default TopProductsCommission;
+
