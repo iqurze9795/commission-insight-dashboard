@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 // Define types for our data
@@ -10,6 +9,8 @@ export interface CommissionEntry {
   "Sub_id2": string;
   "Sub_id3": string;
   "ค่าคอมมิชชั่นสุทธิ(฿)": string;
+  "ชื่อร้านค้า": string;
+  "ชื่อรายการสินค้า": string;
   [key: string]: string;
 }
 
