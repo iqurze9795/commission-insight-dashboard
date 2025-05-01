@@ -105,14 +105,14 @@ const DateRangeCommission: React.FC = () => {
             </PopoverContent>
           </Popover>
 
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Switch
               id="gg555-filter"
               checked={filterGG555}
               onCheckedChange={setFilterGG555}
             />
             <Label htmlFor="gg555-filter">Filter GG555 Only</Label>
-          </div>
+          </div> */}
           
           <div>
             <div className="text-4xl font-bold text-[#1EAEDB]">
