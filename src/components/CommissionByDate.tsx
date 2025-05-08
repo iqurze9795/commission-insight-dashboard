@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,7 +54,7 @@ const CommissionByDate: React.FC = () => {
   }, [dateData, selectedBars]);
 
   const handleBarClick = (data: any) => {
-    if (!data) return;
+    if (!data || !data.name) return;
     
     const clickedDate = data.name;
     setSelectedBars(prev => {
@@ -86,8 +87,9 @@ const CommissionByDate: React.FC = () => {
           width={clickWidth}
           height={clickHeight}
           fill="transparent"
-          style={{ cursor: 'pointer' }}
+          cursor="pointer"
           onClick={() => handleBarClick(payload)}
+          style={{ cursor: 'pointer' }}
         />
         {/* Visible bar */}
         <Rectangle 
