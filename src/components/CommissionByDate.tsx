@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Rectangle } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 const CommissionByDate: React.FC = () => {
   const { commissionData } = useCommission();
@@ -53,53 +53,16 @@ const CommissionByDate: React.FC = () => {
       .reduce((sum, item) => sum + item.value, 0);
   }, [dateData, selectedBars]);
 
-  const handleBarClick = (name: string) => {
-    if (!name) return;
+  const handleBarClick = (data: any) => {
+    if (!data) return;
     
+    const clickedDate = data.name;
     setSelectedBars(prev => {
-      if (prev.includes(name)) {
-        return prev.filter(date => date !== name);
+      if (prev.includes(clickedDate)) {
+        return prev.filter(date => date !== clickedDate);
       }
-      return [...prev, name];
+      return [...prev, clickedDate];
     });
-  };
-
-  // Custom bar shape with much larger click area
-  const CustomBar = (props: any) => {
-    const { x, y, width, height, payload } = props;
-    
-    // Significantly larger hit area for better clickability
-    const clickPadding = 10; // increased padding
-    const clickX = Math.max(0, x - clickPadding);
-    const clickWidth = Math.max(20, width + (clickPadding * 2)); // minimum width for clickable area
-    const clickHeight = height + clickPadding + 10; // extra height for better click target
-    
-    const isSelected = selectedBars.includes(payload.name);
-    const barFill = isSelected ? "#E78B48" : "#BE3D2A";
-    
-    return (
-      <g>
-        {/* Larger invisible clickable rectangle that covers the entire bar area plus padding */}
-        <Rectangle 
-          x={clickX}
-          y={Math.max(0, y - 10)} // add some padding above too
-          width={clickWidth}
-          height={clickHeight + 10} // extend below as well
-          fill="transparent" 
-          style={{cursor: 'pointer'}}
-          onClick={() => handleBarClick(payload.name)}
-        />
-        {/* Visible bar (actual data representation) */}
-        <Rectangle 
-          x={x}
-          y={y}
-          width={width}
-          height={height}
-          fill={barFill}
-          radius={[4, 4, 0, 0]}
-        />
-      </g>
-    );
   };
 
   return (
@@ -119,12 +82,9 @@ const CommissionByDate: React.FC = () => {
         )}
       </CardHeader>
       <CardContent className="h-80">
-        {dateData?.length > 0 ? (
+        {dateData.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart 
-              data={dateData} 
-              margin={{ top: 5, right: 20, left: 20, bottom: 50 }}
-            >
+            <BarChart data={dateData} margin={{ top: 5, right: 20, left: 20, bottom: 50 }}>
               <XAxis 
                 dataKey="name" 
                 angle={-45} 
@@ -165,9 +125,18 @@ const CommissionByDate: React.FC = () => {
               />
               <Bar 
                 dataKey="value" 
-                shape={<CustomBar />}
-                isAnimationActive={false} // disabling animation to improve click responsiveness
-              />
+                radius={[4, 4, 0, 0]} 
+                onClick={handleBarClick}
+                style={{ cursor: 'pointer' }}
+                fill="hsl(var(--muted))"
+              >
+                {dateData.map((entry, index) => (
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={selectedBars.includes(entry.name) ? "#E78B48" : "#BE3D2A"}
+                  />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         ) : (
