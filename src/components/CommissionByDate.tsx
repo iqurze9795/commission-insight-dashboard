@@ -1,8 +1,7 @@
-
 import React, { useMemo, useState } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Rectangle } from "recharts";
 
 const CommissionByDate: React.FC = () => {
   const { commissionData } = useCommission();
@@ -65,6 +64,44 @@ const CommissionByDate: React.FC = () => {
     });
   };
 
+  // Custom bar shape with larger click area
+  const CustomBar = (props: any) => {
+    const { x, y, width, height, fill, dataKey, index, payload } = props;
+    
+    // Create a slightly larger hit area (add padding)
+    const clickPadding = 5;
+    const clickX = Math.max(0, x - clickPadding);
+    const clickWidth = width + (clickPadding * 2);
+    const clickHeight = height + clickPadding;
+    
+    const isSelected = selectedBars.includes(payload.name);
+    const barFill = isSelected ? "#E78B48" : "#BE3D2A";
+    
+    return (
+      <g>
+        {/* Invisible larger clickable area */}
+        <Rectangle 
+          x={clickX}
+          y={y}
+          width={clickWidth}
+          height={clickHeight}
+          fill="transparent"
+          style={{ cursor: 'pointer' }}
+          onClick={() => handleBarClick(payload)}
+        />
+        {/* Visible bar */}
+        <Rectangle 
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          fill={barFill}
+          radius={[4, 4, 0, 0]}
+        />
+      </g>
+    );
+  };
+
   return (
     <Card className="w-full shadow-lg transition-all duration-300 hover:shadow-xl">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -125,18 +162,8 @@ const CommissionByDate: React.FC = () => {
               />
               <Bar 
                 dataKey="value" 
-                radius={[4, 4, 0, 0]} 
-                onClick={handleBarClick}
-                style={{ cursor: 'pointer' }}
-                fill="hsl(var(--muted))"
-              >
-                {dateData.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={selectedBars.includes(entry.name) ? "#E78B48" : "#BE3D2A"}
-                  />
-                ))}
-              </Bar>
+                shape={<CustomBar />}
+              />
             </BarChart>
           </ResponsiveContainer>
         ) : (
