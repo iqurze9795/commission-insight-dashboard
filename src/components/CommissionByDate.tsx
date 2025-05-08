@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState } from "react";
 import { useCommission } from "@/context/CommissionContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -53,21 +52,20 @@ const CommissionByDate: React.FC = () => {
       .reduce((sum, item) => sum + item.value, 0);
   }, [dateData, selectedBars]);
 
-  const handleBarClick = (data: any) => {
-    if (!data || !data.name) return;
+  const handleBarClick = (name: string) => {
+    if (!name) return;
     
-    const clickedDate = data.name;
     setSelectedBars(prev => {
-      if (prev.includes(clickedDate)) {
-        return prev.filter(date => date !== clickedDate);
+      if (prev.includes(name)) {
+        return prev.filter(date => date !== name);
       }
-      return [...prev, clickedDate];
+      return [...prev, name];
     });
   };
 
   // Custom bar shape with larger click area
   const CustomBar = (props: any) => {
-    const { x, y, width, height, fill, dataKey, index, payload } = props;
+    const { x, y, width, height, fill, index, payload } = props;
     
     // Create a slightly larger hit area (add padding)
     const clickPadding = 5;
@@ -79,7 +77,7 @@ const CommissionByDate: React.FC = () => {
     const barFill = isSelected ? "#E78B48" : "#BE3D2A";
     
     return (
-      <g>
+      <g onClick={() => handleBarClick(payload.name)}>
         {/* Invisible larger clickable area */}
         <Rectangle 
           x={clickX}
@@ -88,8 +86,6 @@ const CommissionByDate: React.FC = () => {
           height={clickHeight}
           fill="transparent"
           cursor="pointer"
-          onClick={() => handleBarClick(payload)}
-          style={{ cursor: 'pointer' }}
         />
         {/* Visible bar */}
         <Rectangle 
